@@ -8,73 +8,41 @@ SET QUOTED_IDENTIFIER ON
 GO
 ALTER PROC [dbo].[InsertarUsuario](
     @NombreUsuario VARCHAR(20),
-    @Cuenta VARCHAR(20),
-    @Contraseña VARCHAR(20)
+    @Cuenta VARCHAR(20)
 )
 AS
 BEGIN
-    INSERT INTO Usuarios (NombreUsuario, Cuenta, Contraseña)
-    VALUES (@NombreUsuario, @Cuenta, @Contraseña)
+    INSERT INTO Usuarios (NombreUsuario, Cuenta)
+    VALUES (@NombreUsuario, @Cuenta)
 END
 
-/****** Object:  StoredProcedure [dbo].[InsertarLibro]    Script Date: 17/10/2024 ******/
+/****** Object:  StoredProcedure [dbo].[ActualizarUsuario]    Script Date: 17/10/2024 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-ALTER PROC [dbo].[InsertarLibro](
-    @Titulo VARCHAR(200),
-    @Autor VARCHAR(50),
-    @Categoria VARCHAR(50),
-    @NumeroPaginas INT,
-    @Editorial VARCHAR(50),
-    @FechaEdicion DATE,
-    @FechaPublicacion DATE,
-    @Edicion VARCHAR(200),
-    @Idioma VARCHAR(50),
-    @NumeroEjemplares INT
+ALTER PROC [dbo].[ActualizarUsuario](
+    @IdUsuario INT,
+    @NombreUsuario VARCHAR(20),
+    @Cuenta VARCHAR(20)
 )
 AS
 BEGIN
-    INSERT INTO Libros 
-    (Titulo, Autor, Categoria, NumeroPaginas, Editorial, FechaEdicion, FechaPublicacion, Edicion, Idioma, NumeroEjemplares)
-    VALUES
-    (@Titulo, @Autor, @Categoria, @NumeroPaginas, @Editorial, @FechaEdicion, @FechaPublicacion, @Edicion, @Idioma, @NumeroEjemplares)
+    UPDATE Usuarios
+    SET NombreUsuario = @NombreUsuario,
+        Cuenta = @Cuenta
+    WHERE IdUsuario = @IdUsuario
 END
 
-/****** Object:  StoredProcedure [dbo].[NuevoLector]    Script Date: 17/10/2024 ******/
+/****** Object:  StoredProcedure [dbo].[BuscarUsuario]    Script Date: 17/10/2024 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-ALTER PROC [dbo].[NuevoLector](
-    @CedulaLector BIGINT,
-    @NombreLector VARCHAR(100),
-    @TelefonoLector BIGINT,
-    @DireccionLector VARCHAR(200)
+ALTER PROC [dbo].[BuscarUsuario](
+    @NombreUsuario VARCHAR(20)
 )
 AS
 BEGIN
-    INSERT INTO Lectores (CedulaLector, NombreLector, TelefonoLector, DireccionLector)
-    VALUES (@CedulaLector, @NombreLector, @TelefonoLector, @DireccionLector)
+    SELECT * FROM Usuarios WHERE NombreUsuario = @NombreUsuario
 END
-
-/****** Object:  StoredProcedure [dbo].[GuardarPrestamo]    Script Date: 17/10/2024 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-ALTER PROC [dbo].[GuardarPrestamo](
-    @IdLibro1 INT,
-    @FechaSalida DATE,
-    @FechaDevolucion DATE,
-    @IdLector1 INT
-)
-AS
-BEGIN
-    INSERT INTO Prestamo (IdLibro1, FechaSalida, FechaDevolucion, IdLector1)
-    VALUES (@IdLibro1, @FechaSalida, @FechaDevolucion, @IdLector1)
-    UPDATE Libros SET NumeroEjemplares = NumeroEjemplares - 1 WHERE IdLibro = @IdLibro1
-END
-
-/****** Otros procedimientos almacenados siguen la misma estructura y han sido actualizados con la fecha actual ******/
